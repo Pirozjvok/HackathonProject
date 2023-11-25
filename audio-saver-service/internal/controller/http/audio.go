@@ -2,8 +2,6 @@ package http
 
 import (
 	"audio-saver-service/internal/service"
-	"encoding/json"
-	"fmt"
 	"github.com/gorilla/mux"
 	"log"
 	"net/http"
@@ -33,16 +31,14 @@ func (a *audioController) audio(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Println(&audio)
+	//marshal, err := json.Marshal(audio)
+	//if err != nil {
+	//	log.Println(err)
+	//	http.Error(w, err.Error(), http.StatusInternalServerError)
+	//	return
+	//}
 
-	marshal, err := json.Marshal(audio)
-	if err != nil {
-		log.Println(err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	_, err = w.Write(marshal)
+	_, err = w.Write(audio)
 	if err != nil {
 		log.Println(err)
 		return
