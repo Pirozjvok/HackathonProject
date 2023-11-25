@@ -1,0 +1,8 @@
+app:
+  name: "bell-service"
+http:
+  port: 8003
+pg:
+  conn_uri: "postgres://green:0010@postgres:5432/pg-bells"
+api:
+  url_api: "http://hackathon.ambity.ru/api/contact"
