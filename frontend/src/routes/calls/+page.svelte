@@ -49,6 +49,20 @@ function onMouseUp(event) {
         console.log(event)
         console.log(targetTable)
         if (target) {
+            let state = draggedElement.dataset.status;
+            let id = target.id;
+
+            console.log(state)
+            if (id == "new"){
+              draggedElement = null;
+              return;
+            }
+            if (id == "process" && state == "ok"){
+              draggedElement = null;
+              return;
+            }
+
+            draggedElement.dataset.status = target.id
             target.appendChild(draggedElement);
         }
 
@@ -57,7 +71,7 @@ function onMouseUp(event) {
 }
 
 async function getAll() {
-    let response = await fetch("http://localhost:8000");
+    let response = await fetch("http://185.192.247.23/get/all");
 
     if (response.ok) {
         list = await response.json();
@@ -72,10 +86,10 @@ async function getAll() {
 
             <div class="container_left">
                 <div class="status_new">Новые</div>
-                <div class="call_data_table">
+                <div class="call_data_table" id="new">
                     {#each list as listitem}
                     {#if listitem.status_bell == "new"}
-                    <div class="call_data" id="call_data">
+                    <div class="call_data" id="call_data" data-status="{listitem.status_bell}">
                         <div class="call_num_1">Звонок {listitem.id}</div>
                         <div class="call_date">Дата: {listitem.call_date.split(' ')[0]}</div>
                         <div class="call_time">Время: {listitem.call_date.split(' ')[1]}</div>
@@ -88,10 +102,10 @@ async function getAll() {
 
             <div class="container_center">
                 <div class="status_process">В работе</div>
-                <div class="call_data_table">
+                <div class="call_data_table" id="process">
                     {#each list as listitem}
                     {#if listitem.status_bell == "process"}
-                    <div class="call_data" id="call_data">
+                    <div class="call_data" id="call_data" data-status="{listitem.status_bell}">
                         <div class="call_num_1">Звонок {listitem.id}</div>
                         <div class="call_date">Дата: {listitem.call_date.split(' ')[0]}</div>
                         <div class="call_time">Время: {listitem.call_date.split(' ')[1]}</div>
@@ -104,10 +118,10 @@ async function getAll() {
 
             <div class="container_right">
                 <div class="status_done">Обработано</div>
-                <div class="call_data_table">
+                <div class="call_data_table" id="ok">
                     {#each list as listitem}
-                    {#if listitem.status_bell == "done"}
-                    <div class="call_data" id="call_data">
+                    {#if listitem.status_bell == "ok"}
+                    <div class="call_data" id="call_data" data-status="{listitem.status_bell}">
                         <div class="call_num_1">Звонок {listitem.id}</div>
                         <div class="call_date">Дата: {listitem.call_date.split(' ')[0]}</div>
                         <div class="call_time">Время: {listitem.call_date.split(' ')[1]}</div>
@@ -119,7 +133,7 @@ async function getAll() {
             </div>
 
         </div>
-        <button class="button button_bottom_right">Выгрузить с сервера</button>
+        <button on:mousedown={(e) => e.stopPropagation()} class="button button_bottom_right">Выгрузить с сервера</button>
     </div>
 
     <style>
