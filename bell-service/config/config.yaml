@@ -6,3 +6,4 @@ pg:
   conn_uri: "postgres://green:0010@postgres:5432/pg-bells"
 api:
   url_api: "http://hackathon.ambity.ru/api/contact"
+  service_shd: "http://172.17.0.1:8004/download"

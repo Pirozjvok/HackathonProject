@@ -10,7 +10,7 @@ type MethodDatabase interface {
 	SetBell(ctx context.Context, bell *model.BellInfo) error
 	UpdateBell(ctx context.Context, bell *model.BellInfo) error
 	GetBell(ctx context.Context, id int) (*model.BellInfo, error)
-	GetBells(ctx context.Context) ([]*model.BellInfo, error)
+	GetBells(ctx context.Context) ([]model.BellInfo, error)
 	DeleteBell(ctx context.Context, id int) error
 }
 

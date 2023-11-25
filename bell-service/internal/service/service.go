@@ -13,14 +13,15 @@ type APIRequester interface {
 
 type RUD interface {
 	GetByID(ctx context.Context, id string) (*model.BellInfo, error)
-	GetAll(ctx context.Context) ([]*model.BellInfo, error)
+	GetAll(ctx context.Context) ([]model.BellInfo, error)
 	Update(ctx context.Context, bell *model.BellInfo) error
 	Delete(ctx context.Context, id string) error
 }
 
 type Dependencies struct {
-	UrlAPI string
-	DB     *repository.Repositories
+	UrlAPI     string
+	DB         *repository.Repositories
+	ServiceSHD string
 }
 
 type Services struct {
@@ -30,7 +31,7 @@ type Services struct {
 
 func NewServices(deps *Dependencies) *Services {
 	return &Services{
-		APIRequester: newBellService(deps.UrlAPI, deps.DB.MDB),
+		APIRequester: newBellService(deps.UrlAPI, deps.DB.MDB, deps.ServiceSHD),
 		RUD:          newRUDService(deps.DB.MDB),
 	}
 }

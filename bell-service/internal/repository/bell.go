@@ -8,8 +8,6 @@ import (
 	"github.com/pkg/errors"
 )
 
-const defaultEntityCap = 64
-
 type bellRepository struct {
 	db *postgres.Postgres
 }
@@ -43,14 +41,14 @@ func (b *bellRepository) UpdateBell(ctx context.Context, bell *model.BellInfo) e
 }
 
 func (b *bellRepository) GetBell(ctx context.Context, id int) (*model.BellInfo, error) {
-	sql, _, err := b.db.Builder.Select("id", "status", "calldate", "operatorfio", "clientphone", "contactaudiourl", "statusbell").
-		From("bells").ToSql()
+	sql, args, err := b.db.Builder.Select("*").
+		From("bells").Where(squirrel.Eq{"id": id}).ToSql()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetBell: fail to create sql query")
 	}
 	bell := &model.BellInfo{}
 
-	row := b.db.Pool.QueryRow(ctx, sql)
+	row := b.db.Pool.QueryRow(ctx, sql, args...)
 	err = row.Scan(&bell.ID, &bell.Status, &bell.CallDate, &bell.OperatorFio, &bell.ClientPhone, &bell.ContactAudio, &bell.StatusBell)
 	if err != nil {
 		return nil, errors.Wrap(err, "GetBell: fail to select")
@@ -59,8 +57,8 @@ func (b *bellRepository) GetBell(ctx context.Context, id int) (*model.BellInfo, 
 	return bell, nil
 }
 
-func (b *bellRepository) GetBells(ctx context.Context) ([]*model.BellInfo, error) {
-	sql, _, err := b.db.Builder.Select("id", "status", "calldate", "operatorfio", "clientphone", "contactaudiourl", "statusbell").
+func (b *bellRepository) GetBells(ctx context.Context) ([]model.BellInfo, error) {
+	sql, _, err := b.db.Builder.Select("*").
 		From("bells").ToSql()
 	if err != nil {
 		return nil, errors.Wrap(err, "GetBells: fail to create sql query")
@@ -72,10 +70,10 @@ func (b *bellRepository) GetBells(ctx context.Context) ([]*model.BellInfo, error
 	}
 	defer rows.Close()
 
-	entities := make([]*model.BellInfo, 0, defaultEntityCap)
+	entities := make([]model.BellInfo, 0)
 
 	for rows.Next() {
-		e := &model.BellInfo{}
+		e := model.BellInfo{}
 
 		err = rows.Scan(&e.ID, &e.Status, &e.CallDate, &e.OperatorFio, &e.ClientPhone, &e.ContactAudio, &e.StatusBell)
 		if err != nil {
@@ -104,5 +102,3 @@ func (b *bellRepository) DeleteBell(ctx context.Context, id int) error {
 func newBellRepository(db *postgres.Postgres) *bellRepository {
 	return &bellRepository{db: db}
 }
-
-var _ MethodDatabase = (*bellRepository)(nil)

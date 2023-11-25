@@ -21,7 +21,8 @@ type (
 	}
 
 	API struct {
-		UrlAPI string `yaml:"url_api" env:"API_URL"`
+		UrlAPI     string `yaml:"url_api" env:"API_URL"`
+		ServiceSHD string `yaml:"service_shd" env:"API_SERVICE_SHD"`
 	}
 
 	PG struct {

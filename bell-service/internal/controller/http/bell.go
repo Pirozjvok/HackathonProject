@@ -14,18 +14,18 @@ type bellController struct {
 	rudUC service.RUD
 }
 
-func newBellController(apiUC service.APIRequester) *bellController {
-	return &bellController{apiUC: apiUC}
+func newBellController(apiUC service.APIRequester, rudUC service.RUD) *bellController {
+	return &bellController{apiUC: apiUC, rudUC: rudUC}
 }
 
 func newBellRoutes(uc *service.Services, r *mux.Router) {
-	bellCtrl := newBellController(uc.APIRequester)
+	bellCtrl := newBellController(uc.APIRequester, uc.RUD)
 
 	r.HandleFunc("/dima", bellCtrl.requester).Methods(http.MethodGet)
 	r.HandleFunc("/get/{id:[0-9]+}", bellCtrl.getByID).Methods(http.MethodGet)
 	r.HandleFunc("/get/all", bellCtrl.getAll).Methods(http.MethodGet)
 	r.HandleFunc("/update/{id:[0-9]+}", bellCtrl.update).Methods(http.MethodPost)
-	r.HandleFunc("/remove/{id:[0-9]+}", bellCtrl.remove).Methods(http.MethodGet)
+	r.HandleFunc("/remove/{id:[0-9]+}", bellCtrl.remove).Methods(http.MethodPost)
 }
 
 func (b *bellController) requester(w http.ResponseWriter, r *http.Request) {
@@ -37,22 +37,7 @@ func (b *bellController) requester(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	responseBody := map[string]interface{}{
-		"ok": "ok",
-	}
-
-	response, err := json.Marshal(responseBody)
-	if err != nil {
-		log.Println(err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	_, err = w.Write(response)
-	if err != nil {
-		log.Println(err)
-		return
-	}
+	w.WriteHeader(200)
 }
 func (b *bellController) getByID(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
@@ -60,8 +45,6 @@ func (b *bellController) getByID(w http.ResponseWriter, r *http.Request) {
 	bell, err := b.rudUC.GetByID(r.Context(), vars["id"])
 	if err != nil {
 		log.Println(err)
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
 	}
 
 	ans, err := json.Marshal(bell)
@@ -115,11 +98,7 @@ func (b *bellController) update(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err = w.Write([]byte("ok"))
-	if err != nil {
-		log.Println(err)
-		return
-	}
+	w.WriteHeader(200)
 }
 func (b *bellController) remove(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
@@ -131,9 +110,5 @@ func (b *bellController) remove(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err = w.Write([]byte("ok"))
-	if err != nil {
-		log.Println(err)
-		return
-	}
+	w.WriteHeader(200)
 }

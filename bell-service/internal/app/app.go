@@ -26,9 +26,14 @@ func Run(cfg *config.Config) {
 
 	repositories := repository.NewRepositories(pg)
 
-	deps := &service.Dependencies{UrlAPI: cfg.API.UrlAPI, DB: repositories}
+	deps := &service.Dependencies{
+		UrlAPI:     cfg.API.UrlAPI,
+		DB:         repositories,
+		ServiceSHD: cfg.ServiceSHD,
+	}
 
 	services := service.NewServices(deps)
+
 	rout := mux.NewRouter()
 	http.NewRouter(rout, services)
 	srv := server.NewServer(rout, server.Port(cfg.HTTP.Port))
