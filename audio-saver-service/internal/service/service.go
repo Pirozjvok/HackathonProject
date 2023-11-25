@@ -1,11 +1,7 @@
 package service
 
-import (
-	"os"
-)
-
 type Audio interface {
-	GetAudio(id string) (*os.File, error)
+	GetAudio(id string) ([]byte, error)
 }
 
 type Services struct {

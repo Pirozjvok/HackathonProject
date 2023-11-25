@@ -15,7 +15,7 @@ type audioService struct {
 	url string
 }
 
-func (a *audioService) GetAudio(id string) (*os.File, error) {
+func (a *audioService) GetAudio(id string) ([]byte, error) {
 	uri := a.url + id
 	client := &http.Client{}
 	req, err := http.NewRequest(http.MethodGet, uri, nil)
@@ -68,7 +68,14 @@ func (a *audioService) GetAudio(id string) (*os.File, error) {
 		return nil, errors.Wrap(err, "GetAudio: fail to copy body in file")
 	}
 
-	return file, nil
+	data := make([]byte, 64)
+
+	_, err = file.Read(data)
+	if err != nil {
+		return nil, errors.Wrap(err, "GetAudio: fail to read file")
+	}
+
+	return data, nil
 }
 
 func newAudioService(url string) *audioService {

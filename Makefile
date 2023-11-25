@@ -1,6 +1,6 @@
 push:
 	git add .
-	git commit -a -m "ЭРИК ПИДОРАС"
+	git commit -a -m ""
 	git push -u origin golang
 
 merge:
