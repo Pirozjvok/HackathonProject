@@ -60,6 +60,7 @@ func (a *audioService) GetAudio(id string) ([]byte, error) {
 	if err != nil {
 		return nil, errors.Wrap(err, "GetAudio: fail to create new file in assets")
 	}
+	defer file.Close()
 
 	r := bytes.NewReader(body)
 
@@ -72,10 +73,13 @@ func (a *audioService) GetAudio(id string) ([]byte, error) {
 
 	_, err = file.Read(data)
 	if err != nil {
+		if errors.Is(err, io.EOF) {
+			return data, nil
+		}
 		return nil, errors.Wrap(err, "GetAudio: fail to read file")
 	}
 
-	return data, nil
+	return nil, nil
 }
 
 func newAudioService(url string) *audioService {
