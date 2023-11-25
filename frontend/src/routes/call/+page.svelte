@@ -1,6 +1,9 @@
 <script>
     import AudioPlayer from "./audioPlayer.svelte";
+    import Loading from "./loading.svelte"
 </script>
+
+<Loading></Loading>
 
 <div class="container">
     <div class="arrow">
