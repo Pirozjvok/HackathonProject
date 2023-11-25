@@ -68,17 +68,12 @@ func (a *audioService) GetAudio(id string) ([]byte, error) {
 		return nil, errors.Wrap(err, "GetAudio: fail to copy body in file")
 	}
 
-	data := make([]byte, 64)
-
-	_, err = file.Read(data)
+	data, err := os.ReadFile("assets/" + idi + ".mp3")
 	if err != nil {
-		if errors.Is(err, io.EOF) {
-			return data, nil
-		}
 		return nil, errors.Wrap(err, "GetAudio: fail to read file")
 	}
 
-	return nil, nil
+	return data, nil
 }
 
 func newAudioService(url string) *audioService {
