@@ -4,6 +4,7 @@
     import Loading from "./loading.svelte"
     let loading = false
     let id;
+    let chat;
 
     onMount(() => {
         id = document.location.href.split('/').slice(-1);
@@ -58,13 +59,16 @@
     <div class="audio-panel">
         <h2 class="audio-panel__title">Запись разговора</h2>
         <AudioPlayer class="player" src="/response.mp3"></AudioPlayer>
+
+        <div class="audio-panel_btn-container">
+            <button class="speak-transcription__btn" on:click={() => loading = true}>
+                <p>Загрузить</p> 
+                <p>Транскрибацию</p> 
+            </button>
+        </div>
     </div>     
     <div class="speak-transcription">
         <h2 class="speak-transcription__title">Транскрибация разговора</h2>
-
-        <button class="speak-transcription__btn" on:click={() => loading = true}>
-            Загрузить
-        </button>
         
 
         <!-- <div class="speak-transcription__chat">
@@ -117,7 +121,7 @@ h2 {
     width: 100%;
     height: 100vh;
     grid-template-columns: 134px 0.6fr 1fr 132px;
-    grid-template-rows: 17px 80px 352px 1fr 50px;
+    grid-template-rows: 17px 80px 360px 1fr 50px;
     padding-left: 40px;
 }
 
@@ -200,7 +204,7 @@ h2 {
     height: fit-content;
     width: 100%;
     background: white;
-    padding: 65px;
+    padding: 30px 65px;
     border-radius: 105px;
     grid-row: 3;
     grid-column: 3;
@@ -210,7 +214,7 @@ h2 {
 .audio-panel__title {
     width: 100%;
     text-align: center;
-    margin-bottom: 60px;
+    margin-bottom: 30px;
 }
 
 /* Speak Transcription */
@@ -232,6 +236,26 @@ h2 {
     width: 100%;
     text-align: center;
     font-size: 34px;
+}
+
+.audio-panel_btn-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+.speak-transcription__btn {
+    padding: 9px 20px;
+    background-color: #272525;
+    color: rgba(255, 255, 255, 0.90);
+    text-align: center;
+    font-family: Inter;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 700;
+    letter-spacing: -0.408px;
+    border-radius: 200px;
+    border: none;
+    box-shadow: 0px 0px 3px 3px #272525;
 }
 
 .speak-transcription__chat {
