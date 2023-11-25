@@ -1,14 +1,29 @@
+<script>
+    const login = 'admin'
+    const password = 'admin'
+
+    let login_input = ''
+    let password_input = ''
+    
+    function logIn() {
+        if (login_input === login && password === password_input) {
+            document.location.href = "/calls"
+        } else {
+            alert('Неправильный логин или пароль')
+        }
+    }
+</script>
 <div class="container">
-    <div class="window">
+    <form class="window" on:submit={logIn}>
         <h1 class="window__title">
             Вход
         </h1>
         <div class="window__alert">
-            <input type="text" class="window__login" placeholder="Введите логин">
-            <input type="text" class="window__password" placeholder="Введите пароль">
+            <input type="text" class="window__login" placeholder="Введите логин" bind:value={login_input}>
+            <input type="password" class="window__password" placeholder="Введите пароль" bind:value={password_input}>
         </div>
         <button class="window__button" type="submit">Войти</button>
-    </div>
+    </form>
 </div>
 
 <style>
@@ -47,6 +62,7 @@
     border-bottom: 2px solid #000;
     margin: 0 auto;
     margin-top: 41px;
+    background-color: transparent;
 }
 .window__button {
     margin-top: 82px;

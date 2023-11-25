@@ -1,16 +1,27 @@
 <script>
+  import { onMount } from "svelte";
     import AudioPlayer from "./audioPlayer.svelte";
     import Loading from "./loading.svelte"
+    let loading = false
+    let id;
+
+    onMount(() => {
+        id = document.location.href.split('/').slice(-1);
+    });
 </script>
 
-<Loading></Loading>
+{#if  loading}
+    <Loading></Loading>
+{/if}
 
 <div class="container">
     <div class="arrow">
-        <img src="arrow.svg" alt="Назад">
+        <a href="/calls">
+            <img src="/arrow.svg" alt="Назад">
+        </a>
     </div>
     <div class="title">
-        Звонок 1
+        Звонок {id}
     </div>
     <div class="left">
         <div class="left__contacts">
@@ -50,7 +61,13 @@
     </div>     
     <div class="speak-transcription">
         <h2 class="speak-transcription__title">Транскрибация разговора</h2>
-        <div class="speak-transcription__chat">
+
+        <button class="speak-transcription__btn" on:click={() => loading = true}>
+            Загрузить
+        </button>
+        
+
+        <!-- <div class="speak-transcription__chat">
             <div class="speak-transcription__msg">
                 <div class="speak-transcription__XZ"></div>
                 <div class="speak-transcription__msg-bubble">
@@ -74,7 +91,7 @@
                     </svg>      
                 </div>
             </div>
-            <div class="speak-transcription__msg">
+            <div class="speak-transcription__msg">             
                 <div class="speak-transcription__XZ"></div>
                 <div class="speak-transcription__msg-bubble">
                     Сообщение
@@ -85,7 +102,7 @@
                     </svg>      
                 </div>
             </div>
-        </div>
+        </div> -->
     </div>   
 </div>
 

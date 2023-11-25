@@ -1,8 +1,8 @@
 <script>
-import { onMount } from "svelte";
+import { onMount, afterUpdate } from "svelte";
 
 let list = [];
-let draggedElement = null;
+let draggedElement;
 
 onMount(async () => {
     document.addEventListener('mousemove', onMouseMove);
@@ -11,6 +11,16 @@ onMount(async () => {
     await getAll();
 });
 
+
+afterUpdate(() => {
+    let elements = document.getElementsByClassName("call_data")
+    for (let element of elements) {
+        element.addEventListener('dblclick', (event) => {
+            if (event.target.dataset.id)
+                document.location.href = `/call/${event.target.dataset.id}`
+        });
+    }
+});
 
 function onMouseDown(event) {
     let aaaa = document.elementsFromPoint(event.clientX, event.clientY);
@@ -53,7 +63,10 @@ function onMouseUp(event) {
             let id = target.id;
 
             console.log(state)
-            if (id == "new"){
+            if (id == state) {
+                document.location.href = `/call/${id}`
+            }
+            if (id == "new") {
               draggedElement = null;
               return;
             }
@@ -83,13 +96,12 @@ async function getAll() {
 </script>
 <div class="container">
         <div class="container_column">
-
             <div class="container_left">
                 <div class="status_new">Новые</div>
                 <div class="call_data_table" id="new">
                     {#each list as listitem}
                     {#if listitem.status_bell == "new"}
-                    <div class="call_data" id="call_data" data-status="{listitem.status_bell}">
+                    <div class="call_data" id="call_data" data-status="{listitem.status_bell}" data-id="{listitem.id}">
                         <div class="call_num_1">Звонок {listitem.id}</div>
                         <div class="call_date">Дата: {listitem.call_date.split(' ')[0]}</div>
                         <div class="call_time">Время: {listitem.call_date.split(' ')[1]}</div>
@@ -105,7 +117,7 @@ async function getAll() {
                 <div class="call_data_table" id="process">
                     {#each list as listitem}
                     {#if listitem.status_bell == "process"}
-                    <div class="call_data" id="call_data" data-status="{listitem.status_bell}">
+                    <div class="call_data" id="call_data" data-status="{listitem.status_bell}" data-id="{listitem.id}">
                         <div class="call_num_1">Звонок {listitem.id}</div>
                         <div class="call_date">Дата: {listitem.call_date.split(' ')[0]}</div>
                         <div class="call_time">Время: {listitem.call_date.split(' ')[1]}</div>
@@ -121,7 +133,7 @@ async function getAll() {
                 <div class="call_data_table" id="ok">
                     {#each list as listitem}
                     {#if listitem.status_bell == "ok"}
-                    <div class="call_data" id="call_data" data-status="{listitem.status_bell}">
+                    <div class="call_data" id="call_data" data-status="{listitem.status_bell}" data-id="{listitem.id}">
                         <div class="call_num_1">Звонок {listitem.id}</div>
                         <div class="call_date">Дата: {listitem.call_date.split(' ')[0]}</div>
                         <div class="call_time">Время: {listitem.call_date.split(' ')[1]}</div>
