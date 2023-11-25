@@ -64,7 +64,7 @@ function onMouseUp(event) {
 
             console.log(state)
             if (id == state) {
-                document.location.href = `/call/${id}`
+                document.location.href = `/call/${draggedElement.dataset.id}`
             }
             if (id == "new") {
               draggedElement = null;
