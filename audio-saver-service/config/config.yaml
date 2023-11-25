@@ -1,0 +1,6 @@
+app:
+  name: "audio-saver-service"
+http:
+  port: 8004
+api:
+  uri: "http://localhost:8003/get/"
