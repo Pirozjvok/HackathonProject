@@ -1,8 +1,11 @@
 <script>
 import { onMount, afterUpdate } from "svelte";
+import { BASE_API_URL } from "$lib/config.js"
+import Loading from "./loading.svelte"
 
 let list = [];
 let draggedElement;
+let loading;
 
 onMount(async () => {
     document.addEventListener('mousemove', onMouseMove);
@@ -41,8 +44,33 @@ function onMouseMove(event) {
     }
 }
 
-function onMouseUp(event) {
+async function updateStatus(id, status){
+    try {
+        let response = await fetch(BASE_API_URL + "/update/" + id, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                id: Number(id),
+                status_bell: status
+            })
+        });
+        if (response.ok) {
+            return true;
+        } else {
+            alert("Произошла ошибка при попытке обновить статус: " + response.status + " " + response.statusText)
+        }
+    } catch (err) {
+        alert("Произошла ошибка при попытке обновить статус: " + err)
+    }
+}
+
+async function onMouseUp(event) {
     if (draggedElement) {
+        
+        event.stopPropagation();
+
         draggedElement.style.position = '';
         draggedElement.style.left = '';
         draggedElement.style.top = '';
@@ -56,27 +84,39 @@ function onMouseUp(event) {
                 target = element;
             }
         });
+
         console.log(event)
         console.log(targetTable)
         if (target) {
             let state = draggedElement.dataset.status;
             let id = target.id;
-
+            let call_id = draggedElement.dataset.id
             console.log(state)
+
             if (id == state) {
-                document.location.href = `/call/${draggedElement.dataset.id}`
-            }
-            if (id == "new") {
-              draggedElement = null;
-              return;
-            }
-            if (id == "process" && state == "ok"){
-              draggedElement = null;
-              return;
+                if (event.button == 0){
+                    document.location.href = `/call/${call_id}`
+                }
+                return;
             }
 
-            draggedElement.dataset.status = target.id
-            target.appendChild(draggedElement);
+            if (event.button != 2) {
+                if (id == "new") {
+                    draggedElement = null;
+                    return;
+                }
+                if (id == "process" && state == "ok"){
+                    draggedElement = null;
+                    return;
+                }
+            }
+
+            loading = "Обновление..."
+            if (await updateStatus(call_id, id)){
+                draggedElement.dataset.status = target.id
+                target.appendChild(draggedElement);
+            }
+            loading = false
         }
 
         draggedElement = null;
@@ -84,16 +124,31 @@ function onMouseUp(event) {
 }
 
 async function getAll() {
-    let response = await fetch("http://185.192.247.23/get/all");
 
-    if (response.ok) {
-        list = await response.json();
-    } else {
-        alert("Ошибка HTTP: " + response.status);
+    try {
+        loading = true
+        let response = await fetch(BASE_API_URL + "/get/all");
+
+        if (response.ok) {
+            list = await response.json();
+        } else {
+            alert("Ошибка HTTP: " + response.status);
+        }
+    } catch (e) {
+        alert("Ошибка HTTP: " + e);
     }
-}
+    finally {
+        loading = false
+    }
 
+
+}
 </script>
+
+{#if loading}
+    <Loading text={loading === true ? "Загрузка" : loading}></Loading>
+{/if}
+
 <div class="container">
         <div class="container_column">
             <div class="container_left">
@@ -145,12 +200,10 @@ async function getAll() {
             </div>
 
         </div>
-        <button on:mousedown={(e) => e.stopPropagation()} class="button button_bottom_right">Выгрузить с сервера</button>
+        <button on:mousedown={(e) => e.stopPropagation()} on:click={getAll} class="button button_bottom_right">Выгрузить с сервера</button>
     </div>
 
-    <style>
-
-    
+<style>
   
   .container {
     display: grid;
