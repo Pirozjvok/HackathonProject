@@ -1,0 +1,7 @@
+C:\Users\AynurV\source\repos\Transcription\Transcription\obj\Release\net6.0\linux-x64\PubTmp\Out\Transcription
+C:\Users\AynurV\source\repos\Transcription\Transcription\obj\Release\net6.0\linux-x64\PubTmp\Out\appsettings.Development.json
+C:\Users\AynurV\source\repos\Transcription\Transcription\obj\Release\net6.0\linux-x64\PubTmp\Out\appsettings.json
+C:\Users\AynurV\source\repos\Transcription\Transcription\obj\Release\net6.0\linux-x64\PubTmp\Out\Transcription.dll
+C:\Users\AynurV\source\repos\Transcription\Transcription\obj\Release\net6.0\linux-x64\PubTmp\Out\Transcription.deps.json
+C:\Users\AynurV\source\repos\Transcription\Transcription\obj\Release\net6.0\linux-x64\PubTmp\Out\Transcription.runtimeconfig.json
+C:\Users\AynurV\source\repos\Transcription\Transcription\obj\Release\net6.0\linux-x64\PubTmp\Out\Transcription.pdb

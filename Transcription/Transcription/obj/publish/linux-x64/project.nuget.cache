@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "VPFE57k54TZG4yqLXGMz7XBLpnrLLOn+smFz76z4/bSLdyljaULzadCjHM6SMLRb5auUx8ruiVgnHLvi58Q3Iw==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\AynurV\\source\\repos\\Transcription\\Transcription\\Transcription.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\AynurV\\.nuget\\packages\\microsoft.visualstudio.azure.containers.tools.targets\\1.17.2\\microsoft.visualstudio.azure.containers.tools.targets.1.17.2.nupkg.sha512",
+    "C:\\Users\\AynurV\\.nuget\\packages\\microsoft.netcore.app.host.linux-x64\\6.0.15\\microsoft.netcore.app.host.linux-x64.6.0.15.nupkg.sha512"
+  ],
+  "logs": []
+}
