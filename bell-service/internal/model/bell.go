@@ -1,7 +1,7 @@
 package model
 
 type BellInfo struct {
-	ID           int    `json:"-"`
+	ID           int    `json:"id"`
 	Status       string `json:"status"`
 	CallDate     string `json:"call_date"`
 	OperatorFio  string `json:"operator_fio"`

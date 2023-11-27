@@ -20,7 +20,7 @@ func (r *rudService) GetByID(ctx context.Context, id string) (*model.BellInfo, e
 	return r.db.GetBell(ctx, idi)
 }
 
-func (r *rudService) GetAll(ctx context.Context) ([]*model.BellInfo, error) {
+func (r *rudService) GetAll(ctx context.Context) ([]model.BellInfo, error) {
 	return r.db.GetBells(ctx)
 }
 
